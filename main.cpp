@@ -191,7 +191,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
                 else if (board[k][j] == '0' && gap) break;
                 else{
                     if(block) counter = 1;
-                    if(!gap) block = true;
+                    if(board[k-1][j] != '0') block = true;
                     break;
                 }
             }
@@ -213,7 +213,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
                 else if(board[i+k][j-k] == '0' && gap) break;
                 else{
                     if(block) counter = 1;
-                    if(!gap) block = true;
+                    if(board[i+k-1][j-k+1] != '0') block = true;
                     break;
                 }
             }
@@ -235,7 +235,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
                 else if(board[i+k][j+k] == '0' && gap) break;
                 else{
                     if(block) counter = 1;
-                    if(!gap) block = true;
+                    if(board[i+k-1][j+k-1]) block = true;
                     break;
                 }
             }
@@ -250,11 +250,11 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
 vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','1','0','1','1','1','2','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','1','0','0','0','0','0','0','0'},
+                            {'0','0','0','1','0','0','0','0','0','0'},
+                            {'0','0','0','0','1','0','0','0','0','0'},
+                            {'0','0','0','0','0','1','0','0','0','0'},
+                            {'0','0','0','0','0','0','2','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'} };
 void test_dfs(){
@@ -364,7 +364,7 @@ int main(int argc,  char** argv){
 
 
 
-    test_dfs();
-    test_score();
+    // test_dfs();
+    // test_score();
     return 0;
 }
