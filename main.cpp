@@ -328,7 +328,7 @@ int main(int argc,  char** argv){
         pair<int,int> next_move;
         if(myTurn){
             pair<int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
-            cout << ptom(pp.second) << endl;
+            cout << "Move played: " << ptom(pp.second) << endl;
             board[pp.second.first][pp.second.second] = '1';
             next_move = pp.second;
             myTurn = !myTurn;
@@ -337,6 +337,11 @@ int main(int argc,  char** argv){
             string s = "";
             cin >> s;
             pair<int,int> p = mtop(s);
+            while(board[p.first][p.second] != '0'){
+                cout << "Invalid move" << endl;
+                cin >> s;
+                pair<int,int> p = mtop(s);
+            }
             board[p.first][p.second] = '2';
             cout << "Move played: " << s << endl;
             next_move = p;
