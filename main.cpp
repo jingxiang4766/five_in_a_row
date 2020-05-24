@@ -14,7 +14,7 @@ int n = 11;
 int o3 = 200;
 int c3 = 100;
 int five = 1000000;
-int o4 = 8000;
+int o4 = 100000;
 int c4 = 205;
 int tt = 50;
 
@@ -243,7 +243,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             count(counter, block, gap);
         }
     }
-    return o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*o4 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
+    return o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*1000 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
 }
 
 
