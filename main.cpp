@@ -123,6 +123,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     board[i][j] = '1';
                     auto value = dfs(board, upperleft, bottomright, d-1);
                     value.first += d*score(board, '1', upperleft, bottomright);
+		    value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
                     value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
