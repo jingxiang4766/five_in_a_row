@@ -113,7 +113,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                 if(board[i][j] == '0'){
                     board[i][j] = '1';
                     auto value = dfs(board, upperleft, bottomright, d-1);
-                    value.first += score(board, '1', upperleft, bottomright);
+                    value.first += d*score(board, '1', upperleft, bottomright);
                     value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
@@ -123,7 +123,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                 if(board[i][j] == '0'){
                     board[i][j] = '2';
                     auto value = dfs(board, upperleft, bottomright, d-1);
-                    value.first -= score(board, '2', upperleft, bottomright);
+                    value.first -= d*score(board, '2', upperleft, bottomright);
                     value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
@@ -179,7 +179,6 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 }
             }
             if(counter == 2 && block) counter--;
-            cout << counter << " " << gap << endl;
             count(counter, block, gap);
             // vertical
             counter = 1;
