@@ -123,7 +123,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     board[i][j] = '1';
                     auto value = dfs(board, upperleft, bottomright, d-1);
                     value.first += d*score(board, '1', upperleft, bottomright);
-		    value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
+		            value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
                     value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
@@ -173,7 +173,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(j == 0 || (j > 0 && board[i][j-1] != '0')) block = true;
             for(int k = j+1; k < j+6 && k < n; k++){
                 if(j > 0 && board[i][j-1] == who) break;
-                if(j > 1 && board[i][j-1] == '0' && board[i][j-2] == who) break;
+                // if(j > 1 && board[i][j-1] == '0' && board[i][j-2] == who) break;
                 if(k == n-1 && board[i][k] == who && block == true && counter < 4) counter = 1;
                 if(k == n-1 && board[i][k] == who) block = true;
                 if(board[i][k] == who) counter++;
@@ -197,7 +197,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(i == 0 || (i > 0 && board[i-1][j] != '0')) block = true;
             for(int k = i+1; k < i+6 && k < n; k++){
                 if(i > 0 && board[i-1][j] == who) break;
-                if(i > 1 && board[i-1][j] == '0' && board[i-2][j] == who) break;
+                // if(i > 1 && board[i-1][j] == '0' && board[i-2][j] == who) break;
                 if(k == n-1 && board[k][j] == who && block == true && counter < 4) counter = 1;
                 if(k == n-1 && board[k][j] == who) block = true;
                 if(board[k][j] == who) counter++;
@@ -222,7 +222,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(i == 0 || j == n-1 || (i > 0 && j < n-1 && board[i-1][j+1] != '0')) block = true;
             for(int k = 1; k < 6; k++){
                 if(i+k >= n || j-k < 0) break;
-                if((i > 0 && j < n-1 && board[i-1][j+1] == who)) break;
+                // if((i > 0 && j < n-1 && board[i-1][j+1] == who)) break;
                 if((i > 1 && j < n-2 && board[i-1][j+1] == '0' && board[i-2][j+2] == who)) break;
                 if((i+k == n-1 || j-k == 0) && board[i+k][j-k] == who && block == true && counter < 4) counter = 1;
                 if((i+k == n-1 || j-k == 0) && board[i+k][j-k] == who) block = true;
@@ -247,7 +247,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(i == 0 || j == 0 || (i > 0 && j > 0 && board[i-1][j-1] != '0')) block = true;
             for(int k = 1; k < 6; k++){
                 if(i+k >= n || j+k >= n) break;
-                if(i > 0 && j > 0 && board[i-1][j-1] == who) break;
+                // if(i > 0 && j > 0 && board[i-1][j-1] == who) break;
                 if(i > 1 && j > 1 && board[i-1][j-1] == '0' && board[i-2][j-2] == who) break;
                 if((i+k == n-1 || j+k == n-1) && board[i+k][j+k] == who && block == true && counter < 4) counter = 1;
                 if((i+k == n-1 || j+k == n-1) && board[i+k][j+k] == who) block = true;
