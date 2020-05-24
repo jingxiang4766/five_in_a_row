@@ -160,7 +160,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             bool gap = false;
             bool block = false;
             if(j == 0 || (j > 0 && board[i][j-1] != '0')) block = true;
-            for(int k = j+1; k < j+5 && k < n; k++){
+            for(int k = j+1; k < j+6 && k < n; k++){
                 if(j > 0 && board[i][j-1] == who) break;
                 if(j > 1 && board[i][j-1] == '0' && board[i][j-2] == who) break;
                 if(k == n-1 && board[i][k] == who && block == true && counter < 4) counter = 1;
@@ -170,7 +170,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
                 else if(board[i][k] == '0' && gap) break;
                 else{
                     if(block) counter = 1;
-                    if(!gap) block = true;
+                    if(board[i][k-1] != '0') block = true;
                     break;
                 }
             }
@@ -181,7 +181,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             gap = false;
             block = false;
             if(i == 0 || (i > 0 && board[i-1][j] != '0')) block = true;
-            for(int k = i+1; k < i+5 && k < n; k++){
+            for(int k = i+1; k < i+6 && k < n; k++){
                 if(i > 0 && board[i-1][j] == who) break;
                 if(i > 1 && board[i-1][j] == '0' && board[i-2][j] == who) break;
                 if(k == n-1 && board[k][j] == who && block == true && counter < 4) counter = 1;
@@ -202,7 +202,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             gap = false;
             block = false;
             if(i == 0 || j == n-1 || (i > 0 && j < n-1 && board[i-1][j+1] != '0')) block = true;
-            for(int k = 1; k < 5; k++){
+            for(int k = 1; k < 6; k++){
                 if(i+k >= n || j-k < 0) break;
                 if((i > 0 && j < n-1 && board[i-1][j+1] == who)) break;
                 if((i > 1 && j < n-2 && board[i-1][j+1] == '0' && board[i-2][j+2] == who)) break;
@@ -224,7 +224,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             gap = false;
             block = false;
             if(i == 0 || j == 0 || (i > 0 && j > 0 && board[i-1][j-1] != '0')) block = true;
-            for(int k = 1; k < 5; k++){
+            for(int k = 1; k < 6; k++){
                 if(i+k >= n || j+k >= n) break;
                 if(i > 0 && j > 0 && board[i-1][j-1] == who) break;
                 if(i > 1 && j > 1 && board[i-1][j-1] == '0' && board[i-2][j-2] == who) break;
@@ -243,7 +243,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             count(counter, block, gap);
         }
     }
-    return o2_*10 + o2_/2*tt + o3_*o3 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
+    return o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*o4 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
 }
 
 
@@ -251,10 +251,10 @@ vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','1','0','0','0'},
-                            {'0','0','0','0','0','1','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
+                            {'0','1','0','1','1','1','2','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'} };
 void test_dfs(){
@@ -364,7 +364,7 @@ int main(int argc,  char** argv){
 
 
 
-    // test_dfs();
-    // test_score();
+    test_dfs();
+    test_score();
     return 0;
 }
