@@ -49,7 +49,8 @@ void count(int counter, bool block, bool gap){
         o4_++;
         if(gap) deduct += 1600;
     }
-    if(counter == 5) five_++;
+    if(counter >= 5 && !gap) five_++;
+    if(counter >= 5 && gap) c4_++;
 }
 
 void clean(){
@@ -153,7 +154,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
     clean();
     long long int ans = 0;
     for(int i = upperleft.first; i <= bottomright.first; i++){
-        for(int j = upperleft.second; j < bottomright.second; j++){
+        for(int j = upperleft.second; j <= bottomright.second; j++){
             if(board[i][j] != who) continue;
             // horizontal
             int counter = 1;
@@ -166,15 +167,19 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 if(k == n-1 && board[i][k] == who && block == true && counter < 4) counter = 1;
                 if(k == n-1 && board[i][k] == who) block = true;
                 if(board[i][k] == who) counter++;
-                else if(board[i][k] == '0' && !gap) gap = true;
-                else if(board[i][k] == '0' && gap) break;
+                else if(board[i][k] == '0' && !gap && k != j+5) gap = true;
+                else if(board[i][k] == '0' && gap) {
+                    if(board[i][k-1] == '0') gap = false;
+                    break;
+                }
                 else{
-                    if(block) counter = 1;
+                    if(block && counter != 5) counter = 1;
                     if(board[i][k-1] != '0') block = true;
                     break;
                 }
             }
             if(counter == 2 && block) counter--;
+            cout << counter << " " << gap << endl;
             count(counter, block, gap);
             // vertical
             counter = 1;
@@ -187,10 +192,14 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 if(k == n-1 && board[k][j] == who && block == true && counter < 4) counter = 1;
                 if(k == n-1 && board[k][j] == who) block = true;
                 if(board[k][j] == who) counter++;
-                else if (board[k][j] == '0' && !gap) gap = true;
-                else if (board[k][j] == '0' && gap) break;
+                else if (board[k][j] == '0' && !gap && k != i+5) gap = true;
+                else if (board[k][j] == '0' && gap) {
+                    if(board[k-1][j] == '0') gap = false;
+                    break;
+                }
+
                 else{
-                    if(block) counter = 1;
+                    if(block && counter != 5) counter = 1;
                     if(board[k-1][j] != '0') block = true;
                     break;
                 }
@@ -209,10 +218,13 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 if((i+k == n-1 || j-k == 0) && board[i+k][j-k] == who && block == true && counter < 4) counter = 1;
                 if((i+k == n-1 || j-k == 0) && board[i+k][j-k] == who) block = true;
                 if(board[i+k][j-k] == who) counter++;
-                else if(board[i+k][j-k] == '0' && !gap) gap = true;
-                else if(board[i+k][j-k] == '0' && gap) break;
+                else if(board[i+k][j-k] == '0' && !gap && k != 5) gap = true;
+                else if(board[i+k][j-k] == '0' && gap) {
+                    if(board[i+(k-1)][j-(k-1)] == '0') gap = false;
+                    break;
+                }
                 else{
-                    if(block) counter = 1;
+                    if(block && counter != 5) counter = 1;
                     if(board[i+(k-1)][j-(k-1)] != '0') block = true;
                     break;
                 }
@@ -231,10 +243,13 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 if((i+k == n-1 || j+k == n-1) && board[i+k][j+k] == who && block == true && counter < 4) counter = 1;
                 if((i+k == n-1 || j+k == n-1) && board[i+k][j+k] == who) block = true;
                 if(board[i+k][j+k] == who) counter++;
-                else if(board[i+k][j+k] == '0' && !gap) gap = true;
-                else if(board[i+k][j+k] == '0' && gap) break;
+                else if(board[i+k][j+k] == '0' && !gap && k != 5) gap = true;
+                else if(board[i+k][j+k] == '0' && gap) {
+                    if(board[i+k-1][j+k-1] == '0') gap = false;
+                    break;
+                }
                 else{
-                    if(block) counter = 1;
+                    if(block && counter != 5) counter = 1;
                     if(board[i+k-1][j+k-1] != '0') block = true;
                     break;
                 }
@@ -252,11 +267,11 @@ vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','1','0','1','1','1','2','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'} };
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','2','2','1','1','1','1','1','1','0'} };
 void test_dfs(){
     n = 10;
     auto ul = make_pair(0,0);
