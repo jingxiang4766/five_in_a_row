@@ -25,14 +25,19 @@ int five_ = 0;
 int o4_ = 0;
 int c4_ = 0;
 int o2_ = 0;
+int c2_ = 0;
 
 long long int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright);
 
 void count(int counter, bool block, bool gap){
+    if(counter == 2 && block){
+        c2_++;
+        if(gap) deduct += 1;
+    }
     if(counter == 2 && !block){
         o2_++;
         if(gap) deduct += 2;
-    } 
+    }
     if(counter == 3 && block){
         c3_++;
         if(gap) deduct += 20;
@@ -54,6 +59,7 @@ void count(int counter, bool block, bool gap){
 }
 
 void clean(){
+    c2_ = 0;
     o2_ = 0;
     c3_ = 0;
     o3_ = 0;
@@ -181,7 +187,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                     break;
                 }
             }
-            if(counter == 2 && block) counter--;
+            // if(counter == 2 && block) counter--;
             count(counter, block, gap);
             // vertical
             counter = 1;
@@ -206,7 +212,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                     break;
                 }
             }
-            if(counter == 2 && block) counter--;
+            // if(counter == 2 && block) counter--;
             count(counter, block, gap);
             // bleft
             counter = 1;
@@ -231,7 +237,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                     break;
                 }
             }
-            if(counter == 2 && block) counter--;
+            // if(counter == 2 && block) counter--;
             count(counter, block, gap);
             // bright
             counter = 1;
@@ -256,11 +262,11 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                     break;
                 }
             }
-            if(counter == 2 && block) counter--;
+            // if(counter == 2 && block) counter--;
             count(counter, block, gap);
         }
     }
-    return o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*2000 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
+    return c2_*2 + o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*2000 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
 }
 
 
@@ -273,7 +279,7 @@ vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','2','2','1','1','1','1','1','1','0'} };
+                            {'0','0','0','0','0','1','0','1','0','0'} };
 void test_dfs(){
     n = 10;
     auto ul = make_pair(0,0);
@@ -346,34 +352,34 @@ int main(int argc,  char** argv){
     bottomright.first = min(n-1, bottomright.first+1);
     bottomright.second = min(n-1, bottomright.second+1);
 
-    while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
-        pair<int,int> next_move;
-        if(myTurn){
-            pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
-            cout << "Move played: " << ptom(pp.second) << endl;
-            board[pp.second.first][pp.second.second] = '1';
-            next_move = pp.second;
-            myTurn = !myTurn;
-        }
-        else{
-            string s = "";
-            cin >> s;
-            pair<int,int> p = mtop(s);
-            while(board[p.first][p.second] != '0'){
-                cout << "Invalid move" << endl;
-                cin >> s;
-                p = mtop(s);
-            }
-            cout << "Move played: " << s << endl;
-            board[p.first][p.second] = '2';
-            next_move = p;
-            myTurn = !myTurn;
-        }
-        upperleft.first = max(0, min(upperleft.first, next_move.first-1));
-        upperleft.second = max(0, min(upperleft.second, next_move.second-1));
-        bottomright.first = min(n-1, max(bottomright.first, next_move.first+1));
-        bottomright.second = min(n-1,max(bottomright.second, next_move.second+1));
-    }
+    // while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
+    //     pair<int,int> next_move;
+    //     if(myTurn){
+    //         pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
+    //         cout << "Move played: " << ptom(pp.second) << endl;
+    //         board[pp.second.first][pp.second.second] = '1';
+    //         next_move = pp.second;
+    //         myTurn = !myTurn;
+    //     }
+    //     else{
+    //         string s = "";
+    //         cin >> s;
+    //         pair<int,int> p = mtop(s);
+    //         while(board[p.first][p.second] != '0'){
+    //             cout << "Invalid move" << endl;
+    //             cin >> s;
+    //             p = mtop(s);
+    //         }
+    //         cout << "Move played: " << s << endl;
+    //         board[p.first][p.second] = '2';
+    //         next_move = p;
+    //         myTurn = !myTurn;
+    //     }
+    //     upperleft.first = max(0, min(upperleft.first, next_move.first-1));
+    //     upperleft.second = max(0, min(upperleft.second, next_move.second-1));
+    //     bottomright.first = min(n-1, max(bottomright.first, next_move.first+1));
+    //     bottomright.second = min(n-1,max(bottomright.second, next_move.second+1));
+    // }
     
 
 
@@ -382,6 +388,6 @@ int main(int argc,  char** argv){
 
 
     // test_dfs();
-    // test_score();
+    test_score();
     return 0;
 }
