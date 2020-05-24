@@ -304,18 +304,22 @@ int main(int argc,  char** argv){
     pair<int,int> upperleft, bottomright;
     vector<vector<char> > board(n, vector<char>(n, '0'));
     if(myTurn){
-        cout << "myTurn" << endl;
         upperleft = make_pair(n/2, n/2);
         bottomright = upperleft;
-        cout << ptom(upperleft) << endl;
+        cout << "Move played: " << ptom(upperleft) << endl;
         move(board, upperleft, '1');
         myTurn = !myTurn;
     }
     else{
-        cout << "not myTurn" << endl;
         string s = "";
         cin >> s;
         upperleft = mtop(s);
+        while(upperleft.first < 0 || upperleft.first > n-1 || upperleft.second < 0 || upperleft.second > n-1){
+            cout << "Invalid move" << endl;
+            cin >> s;
+            upperleft = mtop(s);
+        }
+        cout << "Move played: " << s << endl;
         bottomright = upperleft;
         move(board, upperleft, '2');
         myTurn = !myTurn;
@@ -341,10 +345,10 @@ int main(int argc,  char** argv){
             while(board[p.first][p.second] != '0'){
                 cout << "Invalid move" << endl;
                 cin >> s;
-                pair<int,int> p = mtop(s);
+                p = mtop(s);
             }
-            board[p.first][p.second] = '2';
             cout << "Move played: " << s << endl;
+            board[p.first][p.second] = '2';
             next_move = p;
             myTurn = !myTurn;
         }
