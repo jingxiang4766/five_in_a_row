@@ -12,14 +12,14 @@ using namespace std;
 
 int n = 11;
 int o3 = 200;
-int c3 = 100;
+int c3 = 50;
 int five = 50000;
 int o4 = 10000;
 int c4 = 195;
-int tt = 50;
-int edge1 = 99;
-int edge2 = 40;
-int edge3 = 11;
+int tt = 100;
+int edge1 = 250; //99
+int edge2 = 51;  //40
+int edge3 = 11;  //11
 
 int deduct = 0;
 int o3_ = 0;
@@ -29,9 +29,19 @@ int o4_ = 0;
 int c4_ = 0;
 int o2_ = 0;
 int c2_ = 0;
-int o3c4_ = 0;
 
 long long int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright);
+
+int reduce(int i, int j){
+    int ans = 0;
+    if(i == 0 || i == n-1) ans += edge1;
+    if(i == 1 || i == n-2) ans += edge2;
+    if(i == 2 || i == n-3) ans += edge3;
+    if(j == 0 || j == n-1) ans += edge1;
+    if(j == 1 || j == n-2) ans += edge2;
+    if(j == 2 || j == n-3) ans += edge3;
+    return ans;
+}
 
 void count(int counter, bool block, bool gap){
     if(counter == 2 && block){
@@ -55,8 +65,8 @@ void count(int counter, bool block, bool gap){
         if(gap) deduct += 41;
     }
     if(counter == 4 && !block){
-        o3_++;
-        if(gap) deduct -= 51;
+        o4_++;
+        if(gap) deduct += 1600;
     }
     if(counter >= 5 && !gap) five_++;
     if(counter >= 5 && gap) c4_++;
@@ -69,7 +79,6 @@ void clean(){
     o3_ = 0;
     c4_ = 0;
     o4_ = 0;
-    o3c4_ = 0;
     five_ = 0;
     deduct = 0;
 }
@@ -89,17 +98,6 @@ string ptom(pair<int,int> p){
 
 void move(vector<vector<char> >& board, pair<int,int> p, char who){
     board[p.first][p.second] = who;
-}
-
-int reduce(int i, int j){
-    int ans = 0;
-    if(i == 0 || i == n-1) ans += edge1;
-    if(i == 1 || i == n-2) ans += edge2;
-    if(i == 2 || i == n-3) ans += edge3;
-    if(j == 0 || j == n-1) ans += edge1;
-    if(j == 1 || j == n-2) ans += edge2;
-    if(j == 2 || j == n-3) ans += edge3;
-    return ans;
 }
 
 pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperleft, pair<int,int>bottomright, int d){
@@ -139,9 +137,9 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     board[i][j] = '1';
                     auto value = dfs(board, upperleft, bottomright, d-1);
                     value.first += d*score(board, '1', upperleft, bottomright);
-		            value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
-                    value.first -= reduce(i,j);
-                    value.second = make_pair(i,j);
+		    value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
+                    value.first -= reduce(i, j);
+		    value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
                 }
@@ -155,7 +153,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     ans.push_back(value);
                     board[i][j] = '0';
                 }
-            }
+	    } 
             // cout << i << " " << j << " " << ans[ans.size()-1].first << endl;
         }
     }
@@ -190,7 +188,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(j == 0 || (j > 0 && board[i][j-1] != '0')) block = true;
             for(int k = j+1; k < j+6 && k < n; k++){
                 if(j > 0 && board[i][j-1] == who) break;
-                // if(j > 1 && board[i][j-1] == '0' && board[i][j-2] == who) break;
+                if(j > 1 && board[i][j-1] == '0' && board[i][j-2] == who) break;
                 if(k == n-1 && board[i][k] == who && block == true && counter < 4) counter = 1;
                 if(k == n-1 && board[i][k] == who) block = true;
                 if(board[i][k] == who) counter++;
@@ -214,7 +212,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(i == 0 || (i > 0 && board[i-1][j] != '0')) block = true;
             for(int k = i+1; k < i+6 && k < n; k++){
                 if(i > 0 && board[i-1][j] == who) break;
-                // if(i > 1 && board[i-1][j] == '0' && board[i-2][j] == who) break;
+                if(i > 1 && board[i-1][j] == '0' && board[i-2][j] == who) break;
                 if(k == n-1 && board[k][j] == who && block == true && counter < 4) counter = 1;
                 if(k == n-1 && board[k][j] == who) block = true;
                 if(board[k][j] == who) counter++;
@@ -239,7 +237,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(i == 0 || j == n-1 || (i > 0 && j < n-1 && board[i-1][j+1] != '0')) block = true;
             for(int k = 1; k < 6; k++){
                 if(i+k >= n || j-k < 0) break;
-                // if((i > 0 && j < n-1 && board[i-1][j+1] == who)) break;
+                if((i > 0 && j < n-1 && board[i-1][j+1] == who)) break;
                 if((i > 1 && j < n-2 && board[i-1][j+1] == '0' && board[i-2][j+2] == who)) break;
                 if((i+k == n-1 || j-k == 0) && board[i+k][j-k] == who && block == true && counter < 4) counter = 1;
                 if((i+k == n-1 || j-k == 0) && board[i+k][j-k] == who) block = true;
@@ -264,7 +262,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             if(i == 0 || j == 0 || (i > 0 && j > 0 && board[i-1][j-1] != '0')) block = true;
             for(int k = 1; k < 6; k++){
                 if(i+k >= n || j+k >= n) break;
-                // if(i > 0 && j > 0 && board[i-1][j-1] == who) break;
+                if(i > 0 && j > 0 && board[i-1][j-1] == who) break;
                 if(i > 1 && j > 1 && board[i-1][j-1] == '0' && board[i-2][j-2] == who) break;
                 if((i+k == n-1 || j+k == n-1) && board[i+k][j+k] == who && block == true && counter < 4) counter = 1;
                 if((i+k == n-1 || j+k == n-1) && board[i+k][j+k] == who) block = true;
@@ -284,22 +282,22 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             count(counter, block, gap);
         }
     }
-    if(o3_ != 0 && c4_ != 0) deduct -= 3500;
-    if(o3_/2 != 0) deduct -= 2000;
-    return c2_*2 + o2_*10 + o2_/2*tt + o3_*o3 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
+    if(o3_!= 0 && c4_ != 0) deduct -= 8000;
+    else if(c4_ > 1) deduct -= 9500;
+    return c2_*2 + o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*1500 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
 }
 
 
 vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','2','0','0','0','0','0','0'},
-                            {'0','0','2','1','1','0','1','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'} };
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','1','0','1','0','0'} };
 void test_dfs(){
     n = 10;
     auto ul = make_pair(0,0);
@@ -367,10 +365,10 @@ int main(int argc,  char** argv){
         move(board, upperleft, '2');
         myTurn = !myTurn;
     }
-    upperleft.first = max(0, upperleft.first-1);
-    upperleft.second = max(0, upperleft.second-1);
-    bottomright.first = min(n-1, bottomright.first+1);
-    bottomright.second = min(n-1, bottomright.second+1);
+    upperleft.first = max(0, upperleft.first-2);
+    upperleft.second = max(0, upperleft.second-2);
+    bottomright.first = min(n-1, bottomright.first+2);
+    bottomright.second = min(n-1, bottomright.second+2);
 
     while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
         pair<int,int> next_move;
@@ -395,10 +393,10 @@ int main(int argc,  char** argv){
             next_move = p;
             myTurn = !myTurn;
         }
-        upperleft.first = max(0, min(upperleft.first, next_move.first-1));
-        upperleft.second = max(0, min(upperleft.second, next_move.second-1));
-        bottomright.first = min(n-1, max(bottomright.first, next_move.first+1));
-        bottomright.second = min(n-1,max(bottomright.second, next_move.second+1));
+        upperleft.first = max(0, min(upperleft.first, next_move.first-2));
+        upperleft.second = max(0, min(upperleft.second, next_move.second-2));
+        bottomright.first = min(n-1, max(bottomright.first, next_move.first+2));
+        bottomright.second = min(n-1,max(bottomright.second, next_move.second+2));
     }
     
 
@@ -407,7 +405,7 @@ int main(int argc,  char** argv){
 
 
 
-    test_dfs();
-    test_score();
+    // test_dfs();
+    // test_score();
     return 0;
 }
