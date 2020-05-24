@@ -235,7 +235,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
                 else if(board[i+k][j+k] == '0' && gap) break;
                 else{
                     if(block) counter = 1;
-                    if(board[i+k-1][j+k-1]) block = true;
+                    if(board[i+k-1][j+k-1] != '0') block = true;
                     break;
                 }
             }
