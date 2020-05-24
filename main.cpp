@@ -13,8 +13,8 @@ using namespace std;
 int n = 11;
 int o3 = 200;
 int c3 = 100;
-int five = 1000000;
-int o4 = 100000;
+int five = 50000;
+int o4 = 10000;
 int c4 = 205;
 int tt = 50;
 
@@ -26,7 +26,7 @@ int o4_ = 0;
 int c4_ = 0;
 int o2_ = 0;
 
-int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright);
+long long int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright);
 
 void count(int counter, bool block, bool gap){
     if(counter == 2 && !block){
@@ -79,8 +79,8 @@ void move(vector<vector<char> >& board, pair<int,int> p, char who){
     board[p.first][p.second] = who;
 }
 
-pair<int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperleft, pair<int,int>bottomright, int d){
-    vector<pair<int, pair<int,int>>> ans;
+pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperleft, pair<int,int>bottomright, int d){
+    vector<pair<long long int, pair<int,int>>> ans;
     // base case
     if(d == 1){
         for(int i = upperleft.first; i <= bottomright.first; i++){
@@ -88,7 +88,7 @@ pair<int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperlef
                 if(board[i][j] == '0'){
                     board[i][j] = '2';
                     // int s = score(board, '1', upperleft, bottomright) - score(board, '2', upperleft, bottomright);
-                    int s = -1 * score(board, '2', upperleft, bottomright);
+                    long long int s = -1 * score(board, '2', upperleft, bottomright);
                     ans.push_back(make_pair(s, make_pair(i,j)));
                     board[i][j] = '0';
                 }
@@ -132,8 +132,8 @@ pair<int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperlef
         }
     }
 
-    int minimum = INT_MAX;
-    int maximum = INT_MIN;
+    long long int minimum = ans[0].first;
+    long long int maximum = ans[0].first;
     int index = 0;
     for(int i = 0; i < ans.size(); i++){
         if(d % 2 == 0 && ans[i].first > maximum){
@@ -149,9 +149,9 @@ pair<int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperlef
     return ans[index];
 }
 
-int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright){
+long long int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright){
     clean();
-    int ans = 0;
+    long long int ans = 0;
     for(int i = upperleft.first; i <= bottomright.first; i++){
         for(int j = upperleft.second; j < bottomright.second; j++){
             if(board[i][j] != who) continue;
@@ -213,7 +213,7 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
                 else if(board[i+k][j-k] == '0' && gap) break;
                 else{
                     if(block) counter = 1;
-                    if(board[i+k-1][j-k+1] != '0') block = true;
+                    if(board[i+(k-1)][j-(k-1)] != '0') block = true;
                     break;
                 }
             }
@@ -243,18 +243,18 @@ int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<i
             count(counter, block, gap);
         }
     }
-    return o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*1000 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
+    return o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*2000 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
 }
 
 
 vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','1','0','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
-                            {'0','0','0','0','1','0','0','0','0','0'},
-                            {'0','0','0','0','0','1','0','0','0','0'},
-                            {'0','0','0','0','0','0','2','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','1','0','1','1','1','2','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'} };
 void test_dfs(){
@@ -332,7 +332,7 @@ int main(int argc,  char** argv){
     while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
         pair<int,int> next_move;
         if(myTurn){
-            pair<int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
+            pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
             cout << "Move played: " << ptom(pp.second) << endl;
             board[pp.second.first][pp.second.second] = '1';
             next_move = pp.second;
