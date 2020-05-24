@@ -1,7 +1,7 @@
-all: game
+all: gobang
 
-game:
-	g++ -std=c++11 main.cpp -o game
+gobang:
+	g++ -std=c++11 main.cpp -o gobang
 
 clean:
-	rm game
+	rm gobang

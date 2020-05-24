@@ -318,7 +318,7 @@ int main(int argc,  char** argv){
     pair<int,int> upperleft, bottomright;
     vector<vector<char> > board(n, vector<char>(n, '0'));
     if(myTurn){
-        upperleft = make_pair(n/2, n/2);
+        upperleft = make_pair((n+1)/2, (n+1)/2);
         bottomright = upperleft;
         cout << "Move played: " << ptom(upperleft) << endl;
         move(board, upperleft, '1');
