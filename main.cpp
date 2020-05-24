@@ -84,9 +84,11 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
     vector<pair<long long int, pair<int,int>>> ans;
     // base case
     if(d == 1){
+        bool lastMove = true;
         for(int i = upperleft.first; i <= bottomright.first; i++){
             for(int j = upperleft.second; j <= bottomright.second; j++){
                 if(board[i][j] == '0'){
+                    lastMove = false;
                     board[i][j] = '2';
                     // int s = score(board, '1', upperleft, bottomright) - score(board, '2', upperleft, bottomright);
                     long long int s = -1 * score(board, '2', upperleft, bottomright);
@@ -95,6 +97,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                 }
             }
         }
+        if(lastMove) return make_pair(1, make_pair(1,1));
         int minimum = INT_MAX;
         int index = 0;
         for(int i = 0; i < ans.size(); i++){
