@@ -1,0 +1,2 @@
+#!/bin/bash -x
+java -jar gobang-baseline.jar -d 2 $@
