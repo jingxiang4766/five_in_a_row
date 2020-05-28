@@ -365,10 +365,10 @@ int main(int argc,  char** argv){
         move(board, upperleft, '2');
         myTurn = !myTurn;
     }
-    upperleft.first = max(0, upperleft.first-2);
-    upperleft.second = max(0, upperleft.second-2);
-    bottomright.first = min(n-1, bottomright.first+2);
-    bottomright.second = min(n-1, bottomright.second+2);
+    upperleft.first = max(0, upperleft.first-1);
+    upperleft.second = max(0, upperleft.second-1);
+    bottomright.first = min(n-1, bottomright.first+1);
+    bottomright.second = min(n-1, bottomright.second+1);
 
     while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
         pair<int,int> next_move;
