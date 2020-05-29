@@ -198,7 +198,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if(board[i][k] == '0' && !gap && k != j+5) gap = true;
                 else if(board[i][k] == '0' && gap) {
                     if(board[i][k-1] == '0') gap = false;
-                    // else if(counter == 3 && k+1 < n && board[i][k+1] == who) counter++;
+                    else if(counter == 3 && k+1 < n && board[i][k+1] == who) counter++;
                     break;
                 }
                 else{
@@ -224,7 +224,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if (board[k][j] == '0' && !gap && k != i+5) gap = true;
                 else if (board[k][j] == '0' && gap) {
                     if(board[k-1][j] == '0') gap = false;
-                    // else if(counter == 3 && k+1 < n && board[k+1][j] == who) counter++;
+                    else if(counter == 3 && k+1 < n && board[k+1][j] == who) counter++;
                     break;
                 }
 
@@ -252,7 +252,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if(board[i+k][j-k] == '0' && !gap && k != 5) gap = true;
                 else if(board[i+k][j-k] == '0' && gap) {
                     if(board[i+(k-1)][j-(k-1)] == '0') gap = false;
-                    // else if(counter == 3 && i+k+1 < n && j-(k+1) >=0 && board[i+k+1][j-(k+1)] == who) counter++;
+                    else if(counter == 3 && i+k+1 < n && j-(k+1) >=0 && board[i+k+1][j-(k+1)] == who) counter++;
                     break;
                 }
                 else{
@@ -279,7 +279,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if(board[i+k][j+k] == '0' && !gap && k != 5) gap = true;
                 else if(board[i+k][j+k] == '0' && gap) {
                     if(board[i+k-1][j+k-1] == '0') gap = false;
-                    // else if(counter == 3 && i+k+1 < n && j+k+1 < n && board[i+k+1][j+k+1] == who) counter++;
+                    else if(counter == 3 && i+k+1 < n && j+k+1 < n && board[i+k+1][j+k+1] == who) counter++;
                     break;
                 }
                 else{
@@ -306,7 +306,7 @@ vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','0','0','0','1','1','1','1','0','1'},
+                            {'0','0','0','0','1','1','0','1','0','1'},
                             {'0','0','0','0','0','0','0','0','0','0'} };
 void test_dfs(){
     n = 10;
