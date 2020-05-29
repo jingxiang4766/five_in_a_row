@@ -375,34 +375,34 @@ int main(int argc,  char** argv){
     bottomright.first = min(n-1, bottomright.first+1);
     bottomright.second = min(n-1, bottomright.second+1);
 
-    // while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
-    //     pair<int,int> next_move;
-    //     if(myTurn){
-    //         pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
-    //         cout << "Move played: " << ptom(pp.second) << endl;
-    //         board[pp.second.first][pp.second.second] = '1';
-    //         next_move = pp.second;
-    //         myTurn = !myTurn;
-    //     }
-    //     else{
-    //         string s = "";
-    //         cin >> s;
-    //         pair<int,int> p = mtop(s);
-    //         while(board[p.first][p.second] != '0'){
-    //             cout << "Invalid move" << endl;
-    //             cin >> s;
-    //             p = mtop(s);
-    //         }
-    //         cout << "Move played: " << s << endl;
-    //         board[p.first][p.second] = '2';
-    //         next_move = p;
-    //         myTurn = !myTurn;
-    //     }
-    //     upperleft.first = max(0, min(upperleft.first, next_move.first-2));
-    //     upperleft.second = max(0, min(upperleft.second, next_move.second-2));
-    //     bottomright.first = min(n-1, max(bottomright.first, next_move.first+2));
-    //     bottomright.second = min(n-1,max(bottomright.second, next_move.second+2));
-    // }
+    while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
+        pair<int,int> next_move;
+        if(myTurn){
+            pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
+            cout << "Move played: " << ptom(pp.second) << endl;
+            board[pp.second.first][pp.second.second] = '1';
+            next_move = pp.second;
+            myTurn = !myTurn;
+        }
+        else{
+            string s = "";
+            cin >> s;
+            pair<int,int> p = mtop(s);
+            while(board[p.first][p.second] != '0'){
+                cout << "Invalid move" << endl;
+                cin >> s;
+                p = mtop(s);
+            }
+            cout << "Move played: " << s << endl;
+            board[p.first][p.second] = '2';
+            next_move = p;
+            myTurn = !myTurn;
+        }
+        upperleft.first = max(0, min(upperleft.first, next_move.first-2));
+        upperleft.second = max(0, min(upperleft.second, next_move.second-2));
+        bottomright.first = min(n-1, max(bottomright.first, next_move.first+2));
+        bottomright.second = min(n-1,max(bottomright.second, next_move.second+2));
+    }
     
 
 
@@ -410,7 +410,7 @@ int main(int argc,  char** argv){
 
 
 
-    test_dfs();
+    // test_dfs();
     // test_score();
     return 0;
 }
