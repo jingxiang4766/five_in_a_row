@@ -13,8 +13,8 @@ using namespace std;
 int n = 11;
 int o3 = 200;
 int c3 = 50;
-int five = 100000;
-int o4 = 25000;
+int five = 50000;
+int o4 = 10000;
 int c4 = 195;
 int tt = 49;
 int edge1 = 250; //99
@@ -112,11 +112,6 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     board[i][j] = '2';
                     // int s = score(board, '1', upperleft, bottomright) - score(board, '2', upperleft, bottomright);
                     long long int s = -1 * score(board, '2', upperleft, bottomright);
-                    if(s <= -10000){
-                        if(score(board, '1', upperleft, bottomright) <= 10000){
-                            s = -40000;
-                        }
-                    }
                     ans.push_back(make_pair(s, make_pair(i,j)));
                     board[i][j] = '0';
                 }
@@ -142,7 +137,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     board[i][j] = '1';
                     auto value = dfs(board, upperleft, bottomright, d-1);
                     value.first += d*score(board, '1', upperleft, bottomright);
-		            value.first -= (abs(n/2-i) + abs(n/2-j));
+		    value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
                     value.first -= reduce(i, j);
 		    value.second = make_pair(i,j);
                     ans.push_back(value);
@@ -287,22 +282,22 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
             count(counter, block, gap);
         }
     }
-    if(c4_ > 1) deduct -= 25000;
-    else if(o3_!= 0 && c4_ != 0) deduct -= 10000;
+    if(o3_!= 0 && c4_ != 0) deduct -= 8000;
+    else if(c4_ > 1) deduct -= 9500;
     return c2_*2 + o2_*10 + o2_/2*tt + o3_*o3 + o3_/2*1500 + c3_*c3 + o4_*o4 + c4_*c4 + five_*five - deduct;
 }
 
 
 vector<vector<char>> test { {'0','0','0','0','0','0','0','0','0','0'},
                             {'0','0','0','0','0','0','0','0','0','0'},
-                            {'0','1','0','0','2','0','0','0','0','0'},
-                            {'0','0','1','0','2','2','2','0','0','0'},
-                            {'0','0','2','0','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
-                            {'0','0','0','1','0','0','0','0','0','0'},
-                            {'0','0','0','2','0','0','0','0','0','0'},
-                            {'0','0','0','0','0','0','0','0','0','0'} };
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','0','0','0','0','0'},
+                            {'0','0','0','0','0','1','0','1','0','0'} };
 void test_dfs(){
     n = 10;
     auto ul = make_pair(0,0);
