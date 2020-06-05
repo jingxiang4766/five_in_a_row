@@ -11,6 +11,8 @@
 #include <chrono>
 using namespace std;
 
+long long current_max = LLONG_MIN;
+long long current_min = LLONG_MAX;
 int n = 11;
 int o3 = 200;
 int c3 = 50;
@@ -110,10 +112,14 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
             for(int j = upperleft.second; j <= bottomright.second; j++){
                 if(board[i][j] == '0'){
                     lastMove = false;
+                    long long int ss = score(board, '1', upperleft, bottomright);
                     board[i][j] = '2';
-                    // int s = score(board, '1', upperleft, bottomright) - score(board, '2', upperleft, bottomright);
                     long long int s = -1 * score(board, '2', upperleft, bottomright);
                     ans.push_back(make_pair(s, make_pair(i,j)));
+                    if(ss + s < current_max){
+                        current_max = ss + s;
+                        break;
+                    }
                     board[i][j] = '0';
                 }
             }
@@ -136,11 +142,13 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
             if(d % 2 == 0){
                 if(board[i][j] == '0'){
                     board[i][j] = '1';
+                    long long ss = score(board, '1', upperleft, bottomright);
+                    if(d*ss < current_max) continue;
                     auto value = dfs(board, upperleft, bottomright, d-1);
-                    value.first += d*score(board, '1', upperleft, bottomright);
-		    value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
+                    value.first += d*ss;
+		            value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
                     value.first -= reduce(i, j);
-		    value.second = make_pair(i,j);
+		            value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
                 }
@@ -148,6 +156,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
             else if(d % 2 == 1){
                 if(board[i][j] == '0'){
                     board[i][j] = '2';
+                    if(d*score(board, '2', upperleft, bottomright) > current_min) continue;
                     auto value = dfs(board, upperleft, bottomright, d-1);
                     value.first -= d*score(board, '2', upperleft, bottomright);
                     value.second = make_pair(i,j);
