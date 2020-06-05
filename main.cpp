@@ -115,7 +115,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     lastMove = false;
                     board[i][j] = '2';
                     long long int s = -1 * score(board, '2', upperleft, bottomright);
-                    if(level_2-s < current_max) return make_pair(1, make_pair(1,1));
+                    if(level_2+s < current_max) return make_pair(1, make_pair(1,1));
                     ans.push_back(make_pair(s, make_pair(i,j)));
                     board[i][j] = '0';
                 }
