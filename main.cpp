@@ -11,8 +11,6 @@
 #include <chrono>
 using namespace std;
 
-long long current_max = LLONG_MIN;
-long long current_min = LLONG_MAX;
 int n = 11;
 int o3 = 200;
 int c3 = 50;
@@ -23,7 +21,9 @@ int tt = 49;
 int edge1 = 250; //99
 int edge2 = 51;  //40
 int edge3 = 11;  //11
-
+long long current_max = LLONG_MIN;
+long long current_min = LLONG_MAX;
+long long level_2;
 int deduct = 0;
 int o3_ = 0;
 int c3_ = 0;
@@ -32,6 +32,7 @@ int o4_ = 0;
 int c4_ = 0;
 int o2_ = 0;
 int c2_ = 0;
+
 
 long long int score(vector<vector<char> > board, char who, pair<int,int> upperleft, pair<int,int>bottomright);
 
@@ -112,14 +113,10 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
             for(int j = upperleft.second; j <= bottomright.second; j++){
                 if(board[i][j] == '0'){
                     lastMove = false;
-                    long long int ss = score(board, '1', upperleft, bottomright);
                     board[i][j] = '2';
                     long long int s = -1 * score(board, '2', upperleft, bottomright);
+                    if(level_2-s < current_max) return make_pair(1, make_pair(1,1));
                     ans.push_back(make_pair(s, make_pair(i,j)));
-                    if(ss + s < current_max){
-                        current_max = ss + s;
-                        break;
-                    }
                     board[i][j] = '0';
                 }
             }
@@ -144,7 +141,9 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     board[i][j] = '1';
                     long long ss = score(board, '1', upperleft, bottomright);
                     if(d*ss < current_max) continue;
+                    else level_2 = d*ss;
                     auto value = dfs(board, upperleft, bottomright, d-1);
+                    current_max = max(current_max, value.first);
                     value.first += d*ss;
 		            value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
                     value.first -= reduce(i, j);
@@ -156,9 +155,12 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
             else if(d % 2 == 1){
                 if(board[i][j] == '0'){
                     board[i][j] = '2';
-                    if(d*score(board, '2', upperleft, bottomright) > current_min) continue;
+                    long long ss = score(board, '2', upperleft, bottomright);
+                    if(d*ss > current_min) continue;
+                    else current_min = d*ss;
                     auto value = dfs(board, upperleft, bottomright, d-1);
-                    value.first -= d*score(board, '2', upperleft, bottomright);
+                    current_min = min(current_min, value.first);
+                    value.first -= d*ss;
                     value.second = make_pair(i,j);
                     ans.push_back(value);
                     board[i][j] = '0';
