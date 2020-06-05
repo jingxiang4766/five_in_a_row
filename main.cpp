@@ -21,9 +21,6 @@ int tt = 49;
 int edge1 = 250; //99
 int edge2 = 51;  //40
 int edge3 = 11;  //11
-long long current_max = LLONG_MIN;
-long long current_min = LLONG_MAX;
-long long level_2;
 int deduct = 0;
 int o3_ = 0;
 int c3_ = 0;
@@ -104,7 +101,7 @@ void move(vector<vector<char> >& board, pair<int,int> p, char who){
     board[p.first][p.second] = who;
 }
 
-pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperleft, pair<int,int>bottomright, int d){
+pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int> upperleft, pair<int,int>bottomright, int d, long long level_2, long long current_min, long long current_max){
     vector<pair<long long int, pair<int,int>>> ans;
     // base case
     if(d == 1){
@@ -142,7 +139,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     long long ss = score(board, '1', upperleft, bottomright);
                     if(d*ss < current_max) continue;
                     else level_2 = d*ss;
-                    auto value = dfs(board, upperleft, bottomright, d-1);
+                    auto value = dfs(board, upperleft, bottomright, d-1, level_2, current_min, current_max);
                     current_max = max(current_max, value.first);
                     value.first += d*ss;
 		            value.first -= 2 * (abs(n/2-i) + abs(n/2-j));
@@ -158,7 +155,7 @@ pair<long long int, pair<int,int>> dfs(vector<vector<char> > board, pair<int,int
                     long long ss = score(board, '2', upperleft, bottomright);
                     if(d*ss > current_min) continue;
                     else current_min = d*ss;
-                    auto value = dfs(board, upperleft, bottomright, d-1);
+                    auto value = dfs(board, upperleft, bottomright, d-1, level_2, current_min, current_max);
                     current_min = min(current_min, value.first);
                     value.first -= d*ss;
                     value.second = make_pair(i,j);
@@ -208,7 +205,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if(board[i][k] == '0' && !gap && k != j+5) gap = true;
                 else if(board[i][k] == '0' && gap) {
                     if(board[i][k-1] == '0') gap = false;
-                    else if(counter == 3 && k+1 < n && board[i][k+1] == who) counter++;
+                    else if(counter == 3 && k+1 < n && board[i][k+1] == who) gap = false;
                     break;
                 }
                 else{
@@ -234,7 +231,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if (board[k][j] == '0' && !gap && k != i+5) gap = true;
                 else if (board[k][j] == '0' && gap) {
                     if(board[k-1][j] == '0') gap = false;
-                    else if(counter == 3 && k+1 < n && board[k+1][j] == who) counter++;
+                    else if(counter == 3 && k+1 < n && board[k+1][j] == who) gap = false;
                     break;
                 }
 
@@ -262,7 +259,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if(board[i+k][j-k] == '0' && !gap && k != 5) gap = true;
                 else if(board[i+k][j-k] == '0' && gap) {
                     if(board[i+(k-1)][j-(k-1)] == '0') gap = false;
-                    else if(counter == 3 && i+k+1 < n && j-(k+1) >=0 && board[i+k+1][j-(k+1)] == who) counter++;
+                    else if(counter == 3 && i+k+1 < n && j-(k+1) >=0 && board[i+k+1][j-(k+1)] == who) gap = false;
                     break;
                 }
                 else{
@@ -289,7 +286,7 @@ long long int score(vector<vector<char> > board, char who, pair<int,int> upperle
                 else if(board[i+k][j+k] == '0' && !gap && k != 5) gap = true;
                 else if(board[i+k][j+k] == '0' && gap) {
                     if(board[i+k-1][j+k-1] == '0') gap = false;
-                    else if(counter == 3 && i+k+1 < n && j+k+1 < n && board[i+k+1][j+k+1] == who) counter++;
+                    else if(counter == 3 && i+k+1 < n && j+k+1 < n && board[i+k+1][j+k+1] == who) gap = false;
                     break;
                 }
                 else{
@@ -323,7 +320,7 @@ void test_dfs(){
     auto ul = make_pair(0,0);
     auto br = make_pair(9,9);
 
-    auto next = dfs(test, ul, br, 2);
+    auto next = dfs(test, ul, br, 2, 0, LLONG_MAX, LLONG_MIN);
     cout << ptom(next.second) << endl;
 }
 
@@ -393,7 +390,7 @@ int main(int argc,  char** argv){
     while(abs(score(board, '1', upperleft, bottomright)-score(board, '2', upperleft, bottomright)) < 50000){
         pair<int,int> next_move;
         if(myTurn){
-            pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2);
+            pair<long long int, pair<int,int>> pp = dfs(board, upperleft, bottomright, 2, 0, LLONG_MAX, LLONG_MIN);
             cout << "Move played: " << ptom(pp.second) << endl;
             board[pp.second.first][pp.second.second] = '1';
             next_move = pp.second;
@@ -413,10 +410,18 @@ int main(int argc,  char** argv){
             next_move = p;
             myTurn = !myTurn;
         }
-        upperleft.first = max(0, min(upperleft.first, next_move.first-2));
-        upperleft.second = max(0, min(upperleft.second, next_move.second-2));
-        bottomright.first = min(n-1, max(bottomright.first, next_move.first+2));
-        bottomright.second = min(n-1,max(bottomright.second, next_move.second+2));
+        if(n <= 9){
+            upperleft.first = max(0, min(upperleft.first, next_move.first-1));
+            upperleft.second = max(0, min(upperleft.second, next_move.second-1));
+            bottomright.first = min(n-1, max(bottomright.first, next_move.first+1));
+            bottomright.second = min(n-1,max(bottomright.second, next_move.second+1));
+        }
+        else{
+            upperleft.first = max(0, min(upperleft.first, next_move.first-2));
+            upperleft.second = max(0, min(upperleft.second, next_move.second-2));
+            bottomright.first = min(n-1, max(bottomright.first, next_move.first+2));
+            bottomright.second = min(n-1,max(bottomright.second, next_move.second+2));
+        }
     }
     
 
@@ -425,7 +430,7 @@ int main(int argc,  char** argv){
 
 
 
-    test_dfs();
-    test_score();
+    // test_dfs();
+    // test_score();
     return 0;
 }
